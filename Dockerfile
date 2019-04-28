@@ -6,5 +6,5 @@ RUN cd /stack && pdi-build-deps --stack
 
 FROM melopt/perl-alt:latest-runtime
 
-COPY --from=builder /stack /stack/
+COPY --from=builder /stack/ /stack/
 
