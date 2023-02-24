@@ -1,0 +1,24 @@
+#!/bin/sh
+
+set -e
+
+push="$1"
+
+repo="melopt/dancer2-xslate-starman"
+
+now=`date -u`
+sed -i .old "s/##tstamp##/$now/" cpanfile
+
+for base in perl-latest alpine-latest alpine-edge alpine-next ; do
+  docker build -t $repo:$base --build-arg base=$base .
+  if [ "$push" = "push" ] ; then
+    docker push $repo:$base
+  fi
+done
+
+docker tag $repo:perl-latest $repo:latest
+if [ "$push" = "push" ] ; then
+  docker push $repo:latest
+fi
+
+mv cpanfile.old cpanfile
